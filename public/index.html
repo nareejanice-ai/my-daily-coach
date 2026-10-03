@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#176b52">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Daily Coach">
+<link rel="manifest" href="/manifest.webmanifest">
+<title>My Daily Coach</title>
+<link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+<main class="app">
+<header class="top">
+  <div><div class="eyebrow">MY DAILY COACH</div><h1>วันนี้ต้องทำอะไรบ้าง</h1><p id="date" class="muted"></p></div>
+  <div class="top-actions"><button id="historyBtn" class="ghost">ย้อนหลัง</button><button id="profileBtn" class="ghost">โปรไฟล์</button></div>
+</header>
+
+<section id="profilePanel" class="card hidden">
+ <div class="section-head"><div><div class="eyebrow">PROFILE</div><h2>ข้อมูลส่วนตัว</h2></div><button id="closeProfile" class="ghost">ปิด</button></div>
+ <div class="grid2">
+  <label>อายุ<input id="age" type="number" min="16" max="70"></label>
+  <label>เพศ<select id="sex"><option value="male">ชาย</option><option value="female">หญิง</option></select></label>
+  <label>ส่วนสูง (cm)<input id="height" type="number" min="140" max="220"></label>
+  <label>น้ำหนัก (kg)<input id="weight" type="number" min="40" max="150" step="0.1"></label>
+  <label>เป้าหมาย<select id="goal"><option value="performance">Performance</option><option value="maintain">รักษาน้ำหนัก</option><option value="fatloss">ลดไขมัน</option><option value="gain">เพิ่มกล้าม</option></select></label>
+  <label>อาหารที่เลี่ยง<input id="avoid" placeholder="เช่น นม, ถั่ว, ไม่มี"></label>
+ </div><button id="saveProfile" class="primary">บันทึก</button>
+</section>
+
+<section id="historyPanel" class="card hidden">
+ <div class="section-head"><div><div class="eyebrow">HISTORY</div><h2>7 วันที่ผ่านมา</h2></div><button id="closeHistory" class="ghost">ปิด</button></div>
+ <div id="historyList" class="history-list"></div>
+</section>
+
+<section class="card">
+ <div class="eyebrow">DAILY CHECK-IN</div>
+ <div class="grid2"><label>เมื่อคืนเข้านอน<input id="sleep" type="time"></label><label>ตื่นนอน<input id="wake" type="time"></label></div>
+ <div class="question"><span>สดชื่นหลังตื่น</span><div class="chips" id="freshness"></div></div>
+ <div class="question"><span>วันนี้</span><div class="chips" id="dayType"><button data-v="rest">พัก</button><button data-v="training">ซ้อม</button><button data-v="match">แข่ง</button></div></div>
+ <div id="sessionBox" class="grid2">
+   <label>เริ่มเวลา<input id="start" type="time"></label>
+   <label>ระยะเวลา (นาที)<input id="duration" type="number" min="20" max="240"></label>
+   <label>ความหนัก<select id="intensity"><option value="low">เบา</option><option value="moderate">ปานกลาง</option><option value="high">หนัก</option></select></label>
+   <label>ความล้า 1–5<input id="soreness" type="number" min="1" max="5"></label>
+ </div>
+ <button id="analyze" class="primary">วิเคราะห์วันนี้</button>
+</section>
+
+<section id="result" class="hidden">
+ <section class="card accent"><div class="eyebrow">สรุปตรง ๆ</div><h2 id="headline"></h2><p id="summary"></p></section>
+
+ <section class="card">
+  <div class="section-head"><div><div class="eyebrow">FOOD</div><h2>เมนูอาหารวันนี้</h2></div><span class="pill">เลือกมื้อละ 1</span></div>
+  <div id="targetStrip" class="target-strip"></div><div id="mealSections" class="meal-sections"></div>
+ </section>
+
+ <section class="card">
+  <div class="section-head"><div><div class="eyebrow">TODAY LOG</div><h2>กินจริงวันนี้</h2></div><button id="resetMeals" class="ghost smallbtn">ล้างรายการ</button></div>
+  <div class="quick-log">
+    <label>กินอะไรไปแล้ว?<div class="quick-log-row"><input id="mealText" placeholder="เช่น กะเพราหมูสับ ข้าว 2 จาน ไข่ดาว 1"><button id="addMealText" class="primary inline-btn">เพิ่ม</button></div></label>
+    <small id="mealTextHint">พิมพ์เป็นภาษาธรรมดาได้ ถ้า AI ยังไม่เชื่อมต่อ ระบบจะใช้ตัวประเมินในเครื่อง</small>
+  </div>
+  <div id="eatenSummary" class="eaten-summary"></div><div id="remainingBox" class="remaining-box"></div>
+ </section>
+
+ <section class="grid2">
+  <article class="card metric"><div class="eyebrow">HYDRATION</div><h3 id="hydration"></h3><p id="hydrationNote" class="muted"></p></article>
+  <article class="card metric"><div class="eyebrow">FUEL DURING</div><h3 id="fuel"></h3><p id="fuelNote" class="muted"></p></article>
+ </section>
+
+ <section class="card"><div class="eyebrow">TIMING</div><h2>ช่วงเวลาสำคัญ</h2><div id="timeline" class="timeline"></div></section>
+ <section class="card"><div class="eyebrow">COACH</div><h2>สิ่งที่ควรทำวันนี้</h2><div id="coach" class="coach"></div></section>
+</section>
+<section class="legal-note">ใช้เพื่อวางแผนสุขภาพและโภชนาการประจำวัน ไม่ใช่การวินิจฉัยทางการแพทย์</section>
+</main>
+<script src="/app.js"></script>
+</body></html>
