@@ -1,0 +1,9 @@
+{
+  "name": "My Daily Coach",
+  "short_name": "Daily Coach",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f8f5",
+  "theme_color": "#176b52",
+  "icons": []
+}
