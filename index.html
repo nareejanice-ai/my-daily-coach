@@ -128,9 +128,10 @@ function renderCalories(){
 }
 function menus(){
  let w=S.profile.weight,d=S.daily,pre=Math.round(w*(d.duration>=120?3.5:3)),first=Math.round(w*(d.dayType==="rest"?2:2.5)),P=Math.max(120,Math.min(200,Math.round(w*1.5)));
- const e=(n,p,c,pr,note)=>{let baseG=standardServingG(n,p),baseF=estimatedFatG(n);return{n,p,c,pr,f:baseF,note,baseG,baseC:c,basePr:pr,baseF}};
+ const e=(n,p,c,pr,note,fat)=>{let baseG=standardServingG(n,p),baseF=Number.isFinite(+fat)?+fat:estimatedFatG(n);return{n,p,c,pr,f:baseF,note,baseG,baseC:c,basePr:pr,baseF}};
  const seed=Number(key().replaceAll("-",""))+(d.dayType==="match"?17:d.dayType==="training"?9:3)+menuShuffleSeed;
  const firstPool=[
+  e("กรีกโยเกิร์ตโบวล์ + กล้วย + อะโวคาโด + น้ำผึ้ง + ธัญพืช","Greek yogurt 200 g • กล้วย 1 ลูก (~120 g) • อะโวคาโด 50 g • น้ำผึ้ง 10 g • ธัญพืช/กราโนลา 25 g",63,25,"มื้อเช้าอิ่มนาน • เลือกโยเกิร์ตรสธรรมชาติไม่เติมน้ำตาล",14),
   e("กะเพราหมูสับ + ไข่ต้ม",`ข้าว ~${first} g • หมู ~${P} g • ไข่ 1`,riceCarb(first)+8,Math.round(P*.25+7),"น้ำมันน้อย ไม่เผ็ดจัด"),
   e("ข้าวไก่ย่าง + ไข่ต้ม",`ข้าว ~${first} g • ไก่ ~${P} g • ไข่ 1`,riceCarb(first),Math.round(P*.3+7),"กินง่าย"),
   e("ข้าวต้มหมู + ไข่ลวก","1 ชามใหญ่ • หมูเพิ่ม • ไข่ 1",65,35,"มื้อเบา"),
@@ -159,6 +160,7 @@ function menus(){
   e("ข้าวปั้น + ไก่ย่าง + กล้วย","ข้าวปั้น 2–3 ชิ้น • ไก่ • กล้วย",90,35,"พกง่าย")
  ];
  const snackPool=[
+  e("กรีกโยเกิร์ตโบวล์แบบ Snack","Greek yogurt 150 g • กล้วย 100 g • อะโวคาโด 20 g • น้ำผึ้ง 8 g • ธัญพืช/กราโนลา 15 g",47,18,"Snack เบากว่า • ถ้ากินใกล้ซ้อมมากให้ลดอะโวคาโด/ธัญพืชลง",8),
   e("กล้วย + ขนมปังน้ำผึ้ง","กล้วย 1 • ขนมปัง 2 แผ่น",65,7,"เหมาะ 60–90 นาทีก่อน"),
   e("ข้าวปั้นไส้ทูน่า","1–2 ชิ้นเล็ก",55,10,"ไส้ไม่มัน"),
   e("โยเกิร์ต + กล้วย","โยเกิร์ต 1 • กล้วย 1",40,10,"ถ้าทนนมได้"),
@@ -229,6 +231,7 @@ function estimate(t){
  let x=t.toLowerCase(),c=0,p=0,m;
  const servings=(()=>{let z=x.match(/(\d+(?:\.\d+)?)\s*(จาน|ชาม|กล่อง|ที่)/);return z?Math.max(.5,+z[1]):1})();
  const dishes=[
+  {re:/กรีกโยเกิร์ต.*กล้วย|โยเกิร์ต.*อะโวคาโด/,c:63,p:25,f:14,baseG:405},
   {re:/ผัดไท|ผัดไทย/,c:75,p:18},
   {re:/ข้าวผัด/,c:80,p:20},
   {re:/ข้าวมันไก่/,c:75,p:28},
@@ -257,7 +260,7 @@ function estimate(t){
  let e=m?+m[1]:x.includes("ไข่")?1:0;
  p+=e*7;
  if(!c&&!p){c=40*servings;p=20*servings}
- let out={n:t,c:Math.round(c),pr:Math.round(p),title:"บันทึกเอง"},baseG=standardServingG(t,""),baseF=estimatedFatG(t);return{...out,baseG,baseC:out.c,basePr:out.pr,baseF,f:baseF}
+ let out={n:t,c:Math.round(c),pr:Math.round(p),title:"บันทึกเอง"},baseG=dish?.baseG||standardServingG(t,""),baseF=Number.isFinite(+dish?.f)?+dish.f:estimatedFatG(t);return{...out,baseG,baseC:out.c,basePr:out.pr,baseF,f:baseF}
 }
 function renderLog(){
  let raw=[...Object.entries(S.meals).map(([k,v])=>({k,src:"m",...v})),...S.custom.map(v=>({k:String(v.id),src:"c",...v}))];
